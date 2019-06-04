@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+
+	<insert id="insert" parameterType="boardvo">
+		insert into board values(null,
+		#{title}, #{content}, 0, now(), #{writerNo},
+		(select ifnull(max(group_no) + 1, 1) from board as a), 1, 0, 0)
+	</insert>
+
+	<insert id="insertResponse" parameterType="boardvo">
+		insert into board values(null,
+		#{title}, #{content}, 0, now(), #{writerNo},
+		(select a.group_no from board as a where a.no = #{no}), 
+		(select a.order_no + 1 from board as a where a.no = #{no}),
+		(select a.dept + 1 from board as a where a.no = #{no}), 0)
+	</insert>
+	
+	<update id="insertResponseUpdate" parameterType="boardvo">
+		update board set order_no = order_no + 1
+		where group_no = (select * from (select group_no from board where no = #{no}) tmp1) 
+			and order_no > (select * from (select order_no from board where no = #{no}) tmp2)
+	</update>
+
+	<select id="selectList" resultType="boardvo" parameterType="pageinfo">
+		select a.no, a.title, a.count, date_format(a.reg_date, "%y/%m/%d %h:%m:%s") as regDate, 
+		a.writer_no as writerNo, a.dept, a.del, b.name as writer 
+		from board a, user b 
+		where a.writer_no = b.no and a.title like concat( "%", #{kwd}, "%")
+		order by group_no DESC, order_no ASC 
+		limit #{start}, #{display}
+	</select>
+	
+	<select id="countBoard" parameterType="pageinfo" resultType="integer">
+		select count(*) as count from board where title like concat( "%", #{kwd}, "%")
+	</select>
+	
+	<select id="read" parameterType="long" resultType="boardvo">
+		select no, title, content, writer_no as writerNo from board
+		where no = #{no} and del = 0
+	</select>
+	
+	<update id="delete" parameterType="boardvo">
+		update board set del = 1 where no = #{no}
+	</update>
+	
+	<update id="modify" parameterType="boardvo">
+		update board set title = #{title}, content = #{content} where no = #{no}
+	</update>
+	
+	<update id="count" parameterType="long">
+		update board set count = count + 1 where no = #{no}
+	</update>
+
+</mapper>

@@ -1,0 +1,52 @@
+1. maven project 설정
+2. pom 설정
+3. web.xml
+   controller <- service  <- Repository <- SQLSession
+   
+4. AppConfig 설정
+	|--- DBConfig: DataSource
+	|	|--- jdbc.properties
+	|
+	|--- MyBatisConfig: SqlSession, SqlSessionFactory
+
+5. WebConfig 
+	|--- MVCConfig
+	|--- SecurityConfig
+	|--- MessageConfig
+	|--- FileUploadConfig
+	
+6. GlobalExceptionHandler
+	
+7. slf4j, Logback
+
+
+/WEB-INF
+	|--- classes [src/main/java, src/main/resource, src/test/java, src/test/resources]
+		|--- /com
+			|--- cafe24
+				|--- /mysite 
+				|		|--- /config
+				|				|--- AppConfig
+				|				|--- WebConfig
+				|
+				|--- /config (회사가 쓰는 라이브러리들)
+						|--- /app
+						|		|--- DBConfig
+						|		|--- MyBatisConfig
+						|		|--- /mybatis (이건 사실 위쪽에 올라가야함..)
+						|		|		|--- configuration.xml
+						|		|		|--- /mapper
+						|		|				|--- user.xml
+						|		|				|--- ...
+						|		|--- /properties
+						|				|--- jdbc.properties
+						|
+						|--- /web
+								|--- MVCConfig
+								|--- SecurityConfig
+								|--- MessageConfig
+								|--- FileUploadConfig		
+										|--- /messages
+										|		|--- message_ko.properties 
+										|--- /properties
+												|--- multipart.properties
