@@ -62,7 +62,7 @@ public class GuestbookDAO {
 		try {
 			connection = getConnection();
 			
-			String sql = "insert into guestbook values(null, ?, ?, ?,now())";
+			String sql = "insert into guestbook values(default, ?, ?, ?,now())";
 			pstmt = connection.prepareStatement(sql);
 			
 			pstmt.setString(1, vo.getName());
@@ -105,7 +105,7 @@ public class GuestbookDAO {
 			
 			connection = getConnection();
 			
-			String sql = "select no, name, content, date_format(reg_date,'%Y-%m-%d %h:%i:%s' ) " + 
+			String sql = "select no, name, content, to_char(reg_date,'yyyy-mm-dd' ) " + 
 					"from guestbook " + 
 					"order by reg_date desc";
 			pstmt = connection.prepareStatement(sql);
@@ -157,8 +157,8 @@ public class GuestbookDAO {
 		
 		try {
 			
-			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://192.168.1.17:3307/webdb";
+			Class.forName("org.postgresql.Driver");
+			String url = "jdbc:postgresql://192.168.1.138:5432/webdb";
 			connection = DriverManager.getConnection(url, "webdb", "webdb");
 			
 		} catch (ClassNotFoundException e) {
@@ -167,5 +167,21 @@ public class GuestbookDAO {
 		
 		return connection;
 	}
+	
+//	private Connection getConnection() throws SQLException {
+//		Connection connection = null;
+//		
+//		try {
+//			
+//			Class.forName("org.mariadb.jdbc.Driver");
+//			String url = "jdbc:mariadb://192.168.1.17:3307/webdb";
+//			connection = DriverManager.getConnection(url, "webdb", "webdb");
+//			
+//		} catch (ClassNotFoundException e) {
+//			System.out.println("드라이버 로딩 실패:" + e);
+//		}
+//		
+//		return connection;
+//	}
 
 }

@@ -19,7 +19,7 @@ public class UserDAO {
 		try {
 			connection = getConnection();
 			
-			String sql = "update user set name = ?, email = ?, password = ?, gender = ? where no = ? ";
+			String sql = "update member set name = ?, email = ?, password = ?, gender = ? where no = ? ";
 			pstmt = connection.prepareStatement(sql);
 			
 			pstmt.setString(1, vo.getName());
@@ -65,7 +65,7 @@ public class UserDAO {
 			
 			connection = getConnection();
 			
-			String sql = "select name, email, password, gender from user where no = ?";
+			String sql = "select name, email, password, gender from member where no = ?";
 			pstmt = connection.prepareStatement(sql);
 			
 			pstmt.setLong(1, no);
@@ -120,7 +120,7 @@ public class UserDAO {
 			
 			connection = getConnection();
 			
-			String sql = "select no, name from user where email = ? and password = ?";
+			String sql = "select no, name from member where email = ? and password = ?";
 			pstmt = connection.prepareStatement(sql);
 			
 			pstmt.setString(1, email);
@@ -170,7 +170,7 @@ public class UserDAO {
 		try {
 			connection = getConnection();
 			
-			String sql = "insert into user values(null, ?, ?, ?, ?, now())";
+			String sql = "insert into member values(default, ?, ?, ?, ?, 'user', now())";
 			pstmt = connection.prepareStatement(sql);
 			
 			pstmt.setString(1, vo.getName());
@@ -209,8 +209,8 @@ public class UserDAO {
 		
 		try {
 			
-			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://192.168.1.17:3307/webdb";
+			Class.forName("org.postgresql.Driver");
+			String url = "jdbc:postgresql://192.168.1.138:5432/webdb";
 			connection = DriverManager.getConnection(url, "webdb", "webdb");
 			
 		} catch (ClassNotFoundException e) {
@@ -219,4 +219,20 @@ public class UserDAO {
 		
 		return connection;
 	}
+	
+//	private Connection getConnection() throws SQLException {
+//		Connection connection = null;
+//		
+//		try {
+//			
+//			Class.forName("org.mariadb.jdbc.Driver");
+//			String url = "jdbc:mariadb://192.168.1.17:3307/webdb";
+//			connection = DriverManager.getConnection(url, "webdb", "webdb");
+//			
+//		} catch (ClassNotFoundException e) {
+//			System.out.println("드라이버 로딩 실패:" + e);
+//		}
+//		
+//		return connection;
+//	}
 }
