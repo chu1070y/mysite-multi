@@ -7,7 +7,6 @@
 		select * 
 		from user 
 		where email = #{email}
-		
 	</select>
 	
 	<insert id="insert" parameterType="uservo">
