@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cafe24.mysite.dto.PageInfo;
+import com.cafe24.mysite.security.AuthUser;
+import com.cafe24.mysite.security.SecurityUser;
 import com.cafe24.mysite.service.BoardService;
 import com.cafe24.mysite.vo.BoardVO;
-import com.cafe24.mysite.vo.UserVO;
-import com.cafe24.security.Auth;
 
 @Controller
 @RequestMapping("/board")
@@ -52,7 +52,6 @@ public class BoardController {
 		return "board/view";
 	}
 	
-	@Auth(role=Auth.Role.USER)
 	@GetMapping("/write")
 	public String write(Model model) {
 		
@@ -61,7 +60,6 @@ public class BoardController {
 		return "board/write";
 	}
 	
-	@Auth(role=Auth.Role.USER)
 	@GetMapping("/responseWrite")
 	public String responseWrite(@RequestParam("no") Long no, @ModelAttribute PageInfo pageInfo, Model model) {
 		
@@ -73,10 +71,9 @@ public class BoardController {
 	}
 	
 	@PostMapping("/write")
-	public String writeBoard(@ModelAttribute BoardVO vo, HttpSession session) {
+	public String writeBoard(@AuthUser SecurityUser securityUser, @ModelAttribute BoardVO vo, HttpSession session) {
 		
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		vo.setWriterNo(authUser.getNo());
+		vo.setWriterNo(securityUser.getNo());
 		
 		service.writeBoard(vo);
 		
@@ -84,10 +81,9 @@ public class BoardController {
 	}
 	
 	@PostMapping("/responseWrite")
-	public String responseWrite(@ModelAttribute BoardVO vo, HttpSession session) {
+	public String responseWrite(@AuthUser SecurityUser securityUser, @ModelAttribute BoardVO vo, HttpSession session) {
 		
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		vo.setWriterNo(authUser.getNo());
+		vo.setWriterNo(securityUser.getNo());
 		
 		service.responseWrite(vo);
 		
@@ -95,15 +91,10 @@ public class BoardController {
 	}
 	
 	@PostMapping("/delete")
-	public String delete(@ModelAttribute BoardVO vo, HttpSession session, @ModelAttribute PageInfo pageInfo) {
-
-		// 로그인 하지 않은 유저 접근 제어
-		if(session == null) {return "redirect:/board/list";}
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		if(authUser == null) { return "redirect:/board/list"; }
+	public String delete(@AuthUser SecurityUser securityUser, @ModelAttribute BoardVO vo, HttpSession session, @ModelAttribute PageInfo pageInfo) {
 		
 		// 다른 회원 접근 제어
-		if(vo.getWriterNo() != authUser.getNo()) {
+		if(vo.getWriterNo() != securityUser.getNo()) {
 			return "redirect:/board/list?page=" + pageInfo.getPage();
 		}
 		
@@ -113,14 +104,8 @@ public class BoardController {
 	}
 	
 	@GetMapping("/modify/{no}")
-	public String modify(@PathVariable("no") Long no, @ModelAttribute PageInfo pageInfo,
+	public String modify(@AuthUser SecurityUser securityUser, @PathVariable("no") Long no, @ModelAttribute PageInfo pageInfo,
 			Model model, BoardVO vo, HttpSession session) {
-		
-		// 로그인 하지 않은 유저 접근 제어
-		if(session == null) {return "redirect:/board/list";}
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		if(authUser == null) { return "redirect:/board/list"; }
-		
 		
 		vo = service.getBoard(no);
 		
@@ -130,7 +115,7 @@ public class BoardController {
 		}
 		
 		// 다른 회원 접근 제어
-		if(vo.getWriterNo() != authUser.getNo()) {
+		if(vo.getWriterNo() != securityUser.getNo()) {
 			return "redirect:/board/list";
 		}
 		
@@ -141,15 +126,10 @@ public class BoardController {
 	}
 	
 	@PostMapping("/modify")
-	public String modifyBoard(@ModelAttribute BoardVO vo, @ModelAttribute PageInfo pageInfo, HttpSession session) {
-		
-		// 로그인 하지 않은 유저 접근 제어
-		if(session == null) {return "redirect:/board/list";}
-		UserVO authUser = (UserVO) session.getAttribute("authUser");
-		if(authUser == null) { return "redirect:/board/list"; }
+	public String modifyBoard(@AuthUser SecurityUser securityUser, @ModelAttribute BoardVO vo, @ModelAttribute PageInfo pageInfo, HttpSession session) {
 		
 		// 다른 회원 접근 제어
-		if(vo.getWriterNo() != authUser.getNo()) {
+		if(vo.getWriterNo() != securityUser.getNo()) {
 			return "redirect:/board/list";
 		}
 		

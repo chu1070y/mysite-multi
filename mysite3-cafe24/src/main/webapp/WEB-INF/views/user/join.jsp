@@ -5,11 +5,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%> 
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <link href="${pageContext.servletContext.contextPath}/assets/css/user.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="${pageContext.servletContext.contextPath}/assets/js/jquery/jquery-1.9.0.js">
 </script>
@@ -75,7 +78,8 @@ $(function(){
 				name="joinForm" 
 				method="post" 
 				action="${pageContext.servletContext.contextPath}/user/join">
-				
+					
+					<sec:csrfInput />
 					<label class="block-label" for="name">이름</label>
 					<input id="name" name="name" type="text" value="">
 					<spring:hasBindErrors name="userVO">

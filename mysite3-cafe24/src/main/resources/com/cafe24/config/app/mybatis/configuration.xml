@@ -7,9 +7,11 @@
 		<typeAlias alias="boardvo" type="com.cafe24.mysite.vo.BoardVO"/>
 		<typeAlias alias="pageinfo" type="com.cafe24.mysite.dto.PageInfo" />
 		<typeAlias alias="sitevo" type="com.cafe24.mysite.vo.SiteVO"/>
+		<typeAlias alias="galleryvo" type="com.cafe24.mysite.vo.GalleryVO"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="com/cafe24/config/app/mybatis/mapper/user.xml" />
+		<mapper resource="com/cafe24/config/app/mybatis/mapper/gallery.xml" />
 		<mapper resource="com/cafe24/config/app/mybatis/mapper/guestbook.xml" />
 		<mapper resource="com/cafe24/config/app/mybatis/mapper/board.xml" />
 		<mapper resource="com/cafe24/config/app/mybatis/mapper/admin.xml" />

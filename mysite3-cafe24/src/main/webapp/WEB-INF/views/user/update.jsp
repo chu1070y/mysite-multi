@@ -4,6 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>  
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -19,6 +20,7 @@
 			<div id="user">
 
 				<form id="join-form" name="joinForm" method="post" action="${pageContext.servletContext.contextPath}/user/updateUser">
+					<sec:csrfInput />
 					<input type="hidden" name="no" value="${authUser.no }">
 					
 					<label class="block-label" for="name">이름</label>

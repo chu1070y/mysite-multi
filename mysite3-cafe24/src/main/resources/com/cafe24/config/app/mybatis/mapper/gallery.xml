@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="gallery">
+
+	<insert id="insertImg" parameterType="galleryvo">
+		<![CDATA[
+			insert into gallery values(null, #{img}, #{description})
+		]]>
+		<selectKey keyProperty="no" resultType="long" order="AFTER">
+			<![CDATA[
+			select last_insert_id();
+			]]>
+		</selectKey>
+	</insert>
+	
+	<select id="imgList" resultType="galleryvo">
+		select * from gallery
+	</select>
+
+</mapper>

@@ -29,6 +29,8 @@ public class GuestbookService {
 		return guestbookDAO.delete(guestbookVO);		
 	}
 	
-	
+	public List<GuestbookVO> getContentsList(Long lastNo) {
+		return guestbookDAO.getList(lastNo);
+	}
 
 }

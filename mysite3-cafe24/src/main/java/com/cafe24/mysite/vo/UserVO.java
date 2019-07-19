@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.cafe24.mysite.validator.constraints.ValidGender;
+
 public class UserVO {
 	private Long no;
 	
@@ -15,12 +17,17 @@ public class UserVO {
 	@NotEmpty
 	private String email;
 	
+	//@Pattern(regexp="(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,20}", message="비밀번호는 8자 이상 20자 이하의 알파벳, 숫자, 특수문자를 조합하여 작성해야 합니다.") 
+	//@Length(min=8, max=14)
 	private String password;
+	
+	@ValidGender
 	private String gender;
+	
+	private String role = "ROLE_USER";
+	
 	private String joinDate;
 	private Long writerNo;
-	
-	private String role;
 	
 	public UserVO() {
 	}

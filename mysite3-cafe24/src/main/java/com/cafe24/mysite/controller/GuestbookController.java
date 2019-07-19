@@ -58,5 +58,14 @@ public class GuestbookController {
 		return "redirect:/guestbook/delete/" + guestbookVO.getNo();
 	}
 	
+	@GetMapping("/spa")
+	public String timeline(Model model) {
+		
+		List<GuestbookVO> list = guestbookService.getList();
+		model.addAttribute("list", list);
+		
+		return "guestbook/index-spa";
+	}
+	
 	
 }

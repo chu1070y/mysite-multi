@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cafe24.mysite.service.AdminService;
 import com.cafe24.mysite.vo.SiteVO;
-import com.cafe24.security.Auth;
 
 
-@Auth(role=Auth.Role.ADMIN)
 @Controller
 @RequestMapping("/admin")
 public class AdminController {

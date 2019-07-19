@@ -2,6 +2,7 @@ package com.cafe24.mysite.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +13,11 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.cafe24.mysite.security.AuthUser;
+import com.cafe24.mysite.security.SecurityUser;
 import com.cafe24.mysite.service.UserService;
 import com.cafe24.mysite.vo.UserVO;
-import com.cafe24.security.Auth;
-import com.cafe24.security.AuthUser;
 
 @Controller
 @RequestMapping("/user")
@@ -36,8 +36,6 @@ public class UserController {
 	public String join(
 			@ModelAttribute @Valid UserVO userVO,
 			BindingResult result, Model model) { 
-		System.out.println("--------join post");
-		System.out.println(result.hasErrors());
 		
 		if(result.hasErrors()) {
 			List<ObjectError> list = result.getAllErrors();
@@ -66,34 +64,41 @@ public class UserController {
 		return "user/login";
 	}
 
-	@Auth
-	@RequestMapping(value="/update", method=RequestMethod.GET)
-	public String update(@AuthUser UserVO userVO) { 
+	@RequestMapping( value="/update", method=RequestMethod.GET )
+	public String update(
+		@AuthUser SecurityUser securityUser,
+		Model model ){
 		
-		if(userVO == null) {
-			return "redirect:/user/login";
-		}
+		UserVO userVO = userService.getUser( securityUser.getNo() );
+		
+		model.addAttribute( "authUser", userVO );
 		
 		return "user/update";
 	}
 	
-	@RequestMapping(value="/updateUser", method=RequestMethod.POST)
-	public String updateUser(@ModelAttribute UserVO userVO, RedirectAttributes redirect) { 
+	@RequestMapping( value="/update", method=RequestMethod.POST )
+	public String update( HttpSession session, @ModelAttribute UserVO userVo ){
+		UserVO authUser = (UserVO)session.getAttribute("authUser");
+		if(authUser == null) {
+			return "redirect:/";
+		}
 		
-		userService.updateUser(userVO);
+		userVo.setNo( authUser.getNo() );
+		userService.updateUser( userVo );
 		
-		redirect.addFlashAttribute("update", "update");
+		// session의 authUser 변경
+		authUser.setName(userVo.getName());
 		
-		return "redirect:/user/login";
+		return "redirect:/user/update?result=success";
 	}
 	
-	@RequestMapping(value="/auth", method = RequestMethod.POST)
-	public void auth() {
-	}
-	
-	@RequestMapping(value="/logout", method = RequestMethod.GET)
-	public void logout() {
-	}
+//	@RequestMapping(value="/auth", method = RequestMethod.POST)
+//	public void auth() {
+//	}
+//	
+//	@RequestMapping(value="/logout", method = RequestMethod.GET)
+//	public void logout() {
+//	}
 	
 
 

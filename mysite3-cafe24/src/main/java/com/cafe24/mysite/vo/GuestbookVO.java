@@ -6,6 +6,17 @@ public class GuestbookVO {
 	private String password;
 	private String content;
 	private String regDate;
+
+	public GuestbookVO(Long no, String name, String password, String content, String regDate) {
+		this.no = no;
+		this.name = name;
+		this.password = password;
+		this.content = content;
+		this.regDate = regDate;
+	}
+	
+	public GuestbookVO() {
+	}
 	
 	public Long getNo() {
 		return no;
@@ -41,6 +52,11 @@ public class GuestbookVO {
 	public String toString() {
 		return "GuestbookVO [no=" + no + ", name=" + name + ", password=" + password + ", contents=" + content
 				+ ", regDate=" + regDate + "]";
+	}
+
+	public Object getNo2() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
